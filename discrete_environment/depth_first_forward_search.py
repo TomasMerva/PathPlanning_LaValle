@@ -1,10 +1,9 @@
 #!/usr/bin/python3
-import math
-import pygame
 import time
 from discrete_world import *
 
 # The difference between Breadth_first and Depth_first is in QFunction (line 29)
+
 
 def draw_path(came_from, current, draw):
     while current in came_from:

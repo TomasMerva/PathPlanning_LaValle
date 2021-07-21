@@ -29,6 +29,9 @@ class Node:
         self.neighbors = []
         self.total_rows = total_rows
 
+        # For Djikstra
+        self.cost = 1
+
         # Graphics properties
         self.colors_list = Colors()
         self.color = self.colors_list.WHITE
