@@ -87,6 +87,18 @@ class Node:
         # Neighbor down
         if self.index_row < self.total_rows-1 and not grid[self.index_row + 1][self.index_col].is_obstacle():
             self.neighbors.append(grid[self.index_row+1][self.index_col])
+        # Top-right corner
+        if self.index_row > 0 and self.index_col < self.total_rows-1 and not grid[self.index_row-1][self.index_col+1].is_obstacle():
+            self.neighbors.append(grid[self.index_row-1][self.index_col+1])
+        # Top-left corner
+        if self.index_row > 0 and self.index_col > 0 and not grid[self.index_row-1][self.index_col-1].is_obstacle():
+            self.neighbors.append(grid[self.index_row-1][self.index_col-1])
+        # Bottom-right corner
+        if self.index_row < self.total_rows-1 and self.index_col < self.total_rows-1 and not grid[self.index_row+1][self.index_col+1].is_obstacle():
+            self.neighbors.append(grid[self.index_row+1][self.index_col+1])
+        # Bottom-left corner
+        if self.index_row < self.total_rows-1 and self.index_col > 0 and not grid[self.index_row+1][self.index_col-1].is_obstacle():
+            self.neighbors.append(grid[self.index_row+1][self.index_col-1])
 
     def __lt__(self, other):
         return False
@@ -104,7 +116,7 @@ class DiscreteWorld:
         self.colors_list = Colors()
 
     # Function for generating the grid containing nodes
-    def make_grid(self):
+    def make_grid(self, obstacles=False):
         self.grid = []
         # 2D list representing grid with dimension ROWS * ROWS
         for row in range(self.ROWS):
@@ -116,6 +128,16 @@ class DiscreteWorld:
                             grid_size=self.GRID_SIZE,
                             total_rows=self.ROWS)
                 self.grid[row].append(node)
+        if obstacles:
+            t = [(i, 2) for i in range(5)] + [(i, 2) for i in range(5)]
+            obstacles_indices = [(i,2) for i in range(2, self.ROWS-2)] \
+                                + [(i, self.ROWS-3) for i in range(2, self.ROWS-2)] \
+                                + [(2, i) for i in range(3, self.ROWS-3)] \
+                                + [(self.ROWS-3, i) for i in range(3, self.ROWS-3)] \
+                                + [(i, 7) for i in range(8, self.ROWS-3)] \
+                                + [(i, self.ROWS-8) for i in range(3, self.ROWS-8)]
+            for row, col in obstacles_indices:
+                self.grid[row][col].make_obstacle()
 
     # Function for drawing lines to represent grid
     def draw_grid_lines(self):
@@ -141,12 +163,10 @@ class DiscreteWorld:
         node = self.grid[row][col]
         return node
 
-    def create_obstacle_map(self, grid, obstacles_list):
-        pass
-
     def update_neighbors(self):
         for row in self.grid:
             for node in row:
                 node.update_neighbors(self.grid)
+
 
 

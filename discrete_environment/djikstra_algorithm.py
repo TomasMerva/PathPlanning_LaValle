@@ -41,7 +41,7 @@ def DjikstraAlgorithm(draw, start, goal):
 
         for neighbor in current_state.neighbors:                                # line 6 and line 7
             if not neighbor.is_dead():
-                # Compute cost-to-go
+                # Compute cost-to-come
                 cost_to_come = optimal_cost_to_come + neighbor.cost
 
                 if neighbor not in visited:                                     # line 8
@@ -63,19 +63,20 @@ def DjikstraAlgorithm(draw, start, goal):
                         # For showing final path
                         came_from[neighbor] = current_state
 
-        draw()
         # Make current state dead
         if current_state != start:
             current_state.make_dead()
+
+        draw()
         time.sleep(0.02)  # time delay for simulation
 
     print("No solution can be found!")
     return -1
 
 
-def main(width, rows):
+def main(width, rows, obstacles_flag):
     world = DiscreteWorld(width, rows)
-    world.make_grid()
+    world.make_grid(obstacles_flag)
 
     # Start and goal position
     start_node, goal_node = None, None
@@ -121,7 +122,7 @@ def main(width, rows):
                 # reset environment
                 if event.key == pygame.K_DELETE:
                     start_node, goal_node = None, None
-                    world.make_grid()
+                    world.make_grid(obstacles_flag)
 
 
 if __name__ == '__main__':
@@ -129,6 +130,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--rows', type=int, default=20)
     parser.add_argument('--width', type=int, default=800)
+    parser.add_argument('--obstacles', type=bool, default=True)
     args = parser.parse_args()
 
-    main(width=args.width, rows=args.rows)
+    main(width=args.width, rows=args.rows, obstacles_flag=args.obstacles)

@@ -48,9 +48,9 @@ def GeneralForwardSearch(draw, start, goal):
     return -1
 
 
-def main(width, rows):
+def main(width, rows, obstacles_flag):
     world = DiscreteWorld(width, rows)
-    world.make_grid()
+    world.make_grid(obstacles_flag)
 
     # Start and goal position
     start_node, goal_node = None, None
@@ -96,7 +96,7 @@ def main(width, rows):
                 # reset environment
                 if event.key == pygame.K_DELETE:
                     start_node, goal_node = None, None
-                    world.make_grid()
+                    world.make_grid(obstacles_flag)
 
 
 if __name__ == '__main__':
@@ -104,6 +104,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--rows', type=int, default=20)
     parser.add_argument('--width', type=int, default=800)
+    parser.add_argument('--obstacles', type=bool, default=True)
     args = parser.parse_args()
 
-    main(width=args.width, rows=args.rows)
+    main(width=args.width, rows=args.rows, obstacles_flag=args.obstacles)
